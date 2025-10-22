@@ -1,0 +1,38 @@
+Sub HighlightMatchingHyperlinks()
+    Dim wsMain As Worksheet
+    Dim ws As Worksheet
+    Dim mainRange As Range
+    Dim cell As Range
+    Dim linkText As String
+    Dim hl As Hyperlink
+    Dim matchCount As Long
+    
+    ' ?? 기준 시트 이름 수정하세요
+    Set wsMain = ThisWorkbook.Sheets("시트1")
+    Set mainRange = wsMain.Range("A2", wsMain.Cells(wsMain.Rows.Count, "A").End(xlUp))
+    
+    Application.ScreenUpdating = False
+    matchCount = 0
+    
+    ' 시트1을 제외한 모든 시트 검사
+    For Each ws In ThisWorkbook.Sheets
+        If ws.Name <> wsMain.Name Then
+            For Each cell In mainRange
+                linkText = Trim(cell.Value)
+                If Len(linkText) > 0 Then
+                    ' 다른 시트의 모든 하이퍼링크 비교
+                    For Each hl In ws.Hyperlinks
+                        If LCase(hl.Address) = LCase(linkText) Then
+                            hl.Range.Interior.Color = RGB(255, 0, 0) ' ?? 빨간색으로 표시
+                            matchCount = matchCount + 1
+                        End If
+                    Next hl
+                End If
+            Next cell
+        End If
+    Next ws
+    
+    Application.ScreenUpdating = True
+    MsgBox "총 " & matchCount & "개의 일치하는 링크가 빨간색으로 표시되었습니다.", vbInformation
+End Sub
+
