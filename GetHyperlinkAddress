@@ -1,0 +1,10 @@
+Function GetHyperlinkAddress(cell As Range) As String
+    On Error Resume Next
+    If cell.Hyperlinks.Count > 0 Then
+        GetHyperlinkAddress = cell.Hyperlinks(1).Address
+    Else
+        GetHyperlinkAddress = "no link in here"
+    End If
+End Function
+
+
